@@ -37,3 +37,10 @@ make qemu-nox
 ```bash
 sudo docker rm 6828-labenv -f && sudo docker rmi 6828-labenv:v1
 ```
+
+## make的使用
+
+make 调用了sh文件夹下的脚本来运行和运行-调试jos：
+1. `make mkenv`创建实验环境，自动生成docker镜像，运行容器
+2. `make run` 以普通模式运行jos，其中对应的是jos里的`make qemu-nox`
+3. `make run-gdb`对应jos的`make qemu-nox-gdb`，输入后gdb的前台将连接到当前终端，gdb退出后，后台运行的qemu也会自动退出
