@@ -1,3 +1,5 @@
+坏境：Ubuntu-22.04-wsl2 装有 [docker](https://docs.docker.com/engine/install/), gdb, git
+
 ## 创建坏境镜像
 
 ```bash
