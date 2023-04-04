@@ -6,6 +6,20 @@ source sh/exc.sh
 LOG_LEVEL=$3
 LOG_FILE=$4
 
+function coner_run() {
+    log_always "Container running..."
+    sudo docker run -itd  -w /lab --name $1 --net="host" -h $1 -v $(pwd)/lab:/lab $1:v1 /bin/bash 1>/dev/null 2>>$2
+    if [ $? -eq 0 ]
+    then
+    log_always "Container runs successfully"
+    exit 0
+    else
+    log_err "Container failed to run"
+    log_warn "Plase check" $2 "file"
+    exit 1
+    fi
+}
+
 log_clear "Start building the lab environment"
 
 # 先判断有木有 img 有则 img_exist=1 无则 img_exist=0
@@ -36,6 +50,7 @@ log_always "Image creating..."
 ls | grep qemu
 if [ $? -eq 1 ]
 then
+log_always "拉取qemu"
 git clone https://gitee.com/yeuimu/6.828-qemu.git --depth 1 qemu 1>/dev/null 2>>$LOG_FILE
 fi
 # 开始制作镜像
@@ -60,18 +75,3 @@ git clone https://pdos.csail.mit.edu/6.828/2018/jos.git lab
 fi
 # 运行容器
 coner_run $2 $LOG_FILE
-
-
-function coner_run() {
-    log_always "Container running..."
-    sudo docker run -itd  -w /lab --name $1 --net="host" -h $1 -v $(pwd)/lab:/lab $1:v1 /bin/bash 1>/dev/null 2>>$2
-    if [ $? -eq 0 ]
-    then
-    log_always "Container runs successfully"
-    exit 0
-    else
-    log_err "Container failed to run"
-    log_warn "Plase check" $2 "file"
-    exit 1
-    fi
-}
